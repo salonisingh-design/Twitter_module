@@ -3,6 +3,8 @@ import aiohttp, asyncio, requests, time, random
 from typing import Optional, Dict
 from bs4 import BeautifulSoup
 
+from proxy_detail import cookie_proxy_info
+
 
 def fetch_cookie_data(tweet_url: str) -> Dict[str, Optional[str]]:
 
@@ -22,7 +24,11 @@ def fetch_cookie_data(tweet_url: str) -> Dict[str, Optional[str]]:
     }
 
     try:
-        r = requests.get(tweet_url, headers=headers, timeout=10)
+        r = requests.get(tweet_url, headers=headers, timeout=10,proxies=cookie_proxy_info())
+        print("Status code:", r.status_code)
+        print("Length of HTML:", len(r.text))
+        print("Preview:", r.text[:500])
+
         if r.status_code == 200:
             text = r.text
             soup = BeautifulSoup(text, "html.parser")
