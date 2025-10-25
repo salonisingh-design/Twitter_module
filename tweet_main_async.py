@@ -90,10 +90,10 @@ import traceback
 from config import BEARER_TOKEN, get_output_table
 from cookie_dynamic_handling_async import TokenManager
 from db_manager_async import AsyncDBManager
-from twitter_module.tweet_crawl_aysnc import fetch_tweet_data
-from twitter_module.tweet_parser import parse_tweet_data
+from tweet_crawl_aysnc import fetch_tweet_data
+from tweet_parser import parse_tweet_data
 
-CONCURRENCY = 5
+CONCURRENCY = 10
 LOG_DIR = os.path.join(os.getcwd(), "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR, "run_log.txt")
