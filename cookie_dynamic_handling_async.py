@@ -8,7 +8,7 @@ from proxy_detail import cookie_proxy_info
 
 def fetch_cookie_data(tweet_url: str) -> Dict[str, Optional[str]]:
 
-    time.sleep(random.uniform(0.1, 0.3))
+    time.sleep(random.uniform(2,3))
     headers = {
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'accept-language': 'en-US,en;q=0.9',
@@ -26,8 +26,8 @@ def fetch_cookie_data(tweet_url: str) -> Dict[str, Optional[str]]:
     try:
         r = requests.get(tweet_url, headers=headers, timeout=10,proxies=cookie_proxy_info())
         print("Status code:", r.status_code)
-        print("Length of HTML:", len(r.text))
-        print("Preview:", r.text[:500])
+        # print("Length of HTML:", len(r.text))
+        # print("Preview:", r.text[:500])
 
         if r.status_code == 200:
             text = r.text
