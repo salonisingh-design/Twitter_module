@@ -1,5 +1,3 @@
-
-
 import asyncio
 import aiohttp
 import time
@@ -13,7 +11,7 @@ from tweet_parser import parse_tweet_data
 import random
 
 CONCURRENCY = 10
-BATCH_SIZE = 1000  # Process tweets in batches
+BATCH_SIZE = 500  # Process tweets in batches
 MAX_RETRIES = 3
 LOG_DIR = os.path.join(os.getcwd(), "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -30,7 +28,7 @@ def log_print(msg: str):
 
 async def fetch_parse_save(sem, session, token_mgr, db, tweet_url, output_table, input_table):
     async with sem:
-        await asyncio.sleep(random.uniform(0.05, 0.15))  # tiny delay to reduce rate-limit
+        await asyncio.sleep(random.uniform(0.1, 0.3))  # jitter to reduce rate-limit
         status = "unknown"
         for attempt in range(MAX_RETRIES):
             try:
@@ -49,7 +47,7 @@ async def fetch_parse_save(sem, session, token_mgr, db, tweet_url, output_table,
             except Exception as e:
                 log_print(f"❌ Attempt {attempt+1} failed for {tweet_url}: {type(e).__name__} - {e}")
                 traceback.print_exc()
-                await asyncio.sleep(1)  # wait before retry
+                await asyncio.sleep(2 ** attempt * random.uniform(0.5, 1.5))  # exponential backoff
         else:
             # All retries failed
             status = "error"
@@ -100,4 +98,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
